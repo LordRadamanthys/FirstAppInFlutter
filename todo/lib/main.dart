@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'models/item.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -10,28 +12,49 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.deepPurpleAccent[300],
+        primarySwatch: Colors.deepPurple,
       ),
-      home: MyHomePage(),
+      home: HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class HomePage extends StatefulWidget {
+  var items = new List<Item>();
+  HomePage() {
+    items = [];
+    items.add(Item(title: "Estrutura de dados", done: false));
+    items.add(Item(title: "Sistemas operacionais", done: false));
+    items.add(Item(title: "Banco de dados", done: false));
+    items.add(Item(title: "RPA", done: true));
+  }
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text("List"),
         ),
-        body: Container(
-            child: Center(
-          child: Text("Olá mundo"),
-        )));
+        body: ListView.builder(
+          itemCount: widget.items.length,
+          itemBuilder: (BuildContext context, int index) {
+            final item = widget.items[index];
+            return CheckboxListTile(
+              title: Text(item.title),
+              key: Key(item.title),
+              value: item.done,
+              onChanged: (value){
+                setState(() {
+                  item.done = value;
+                });
+              },
+            );
+          },
+        ));
   }
 }
